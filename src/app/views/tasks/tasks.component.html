@@ -9,30 +9,28 @@
     </mat-button-toggle-group>
     <a mat-flat-button color="primary" [routerLink]="['/form']">Nueva Tarea</a>
   </nav>
-  <mat-list class="w-full border-y-2 border-slate-300 py-4 divide-dashed">
+  <ul class="w-full border-y-2 border-slate-300 py-4 divide-dashed space-y-5">
     @for (task of tasks(); track task.id; let index = $index, last = $last) {
-      <mat-list-item>
-        <div class="flex flex-col">
-          <header class="flex justify-start space-x-4">
-            <h6 class="text-lg">
-              <span>{{ index + 1 }}.</span> <span class="font-semibold ps-3">{{ task.name }}</span> -
-              <small>{{ task.dueDate | date:'yyyy-MM-dd' }}</small>
-            </h6>
-            @if (task.status === 'pending') {
-              <button mat-icon-button color="primary" type="button" matTooltip="Marcar como completada"
-                      (click)="markAsCompleted(task)">
-                <mat-icon>task</mat-icon>
-              </button>
-            }
-            <button mat-icon-button color="warn" type="button" matTooltip="Eliminar tarea"
-                    (click)="removeTask(task)">
-              <mat-icon>delete</mat-icon>
+      <li>
+        <header class="flex justify-start space-x-4">
+          <h6 class="text-lg">
+            <span>{{ index + 1 }}.</span> <span class="font-semibold ps-3">{{ task.name }}</span> -
+            <small>{{ task.dueDate | date:'yyyy-MM-dd' }}</small>
+          </h6>
+          @if (task.status === 'pending') {
+            <button mat-icon-button color="primary" type="button" matTooltip="Marcar como completada"
+                    (click)="markAsCompleted(task)">
+              <mat-icon>task</mat-icon>
             </button>
-          </header>
-          <span class="font-semibold text-base">
+          }
+          <button mat-icon-button color="warn" type="button" matTooltip="Eliminar tarea"
+                  (click)="removeTask(task)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </header>
+        <span class="font-semibold text-base">
             Personas Asociadas:
           </span>
-        </div>
         <mat-list>
           @for (people of task.people; track people.name) {
             <mat-list-item>
@@ -43,14 +41,14 @@
             </mat-list-item>
           }
         </mat-list>
-      </mat-list-item>
+      </li>
       @if (!last) {
         <mat-divider></mat-divider>
       }
     } @empty {
-      <mat-list-item>
+      <li>
         <span class="font-semibold">No hay tareas</span>
-      </mat-list-item>
+      </li>
     }
-  </mat-list>
+  </ul>
 </section>

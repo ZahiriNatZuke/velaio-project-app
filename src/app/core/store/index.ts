@@ -5,7 +5,7 @@ import { generateID } from '@app/core/utils';
 import { effect } from '@angular/core';
 
 export const TasksStore = signalStore(
-  { providedIn: 'root' },
+  { providedIn: 'root', protectedState: true },
   withEntities<Task>(),
   withMethods((store) => ( {
     getTask(id: string): Task | undefined {
@@ -37,10 +37,10 @@ export const TasksStore = signalStore(
     }
   } )),
   withHooks({
-    onInit: (store) => {
-      store.loadTaskFromStorage();
+    onInit: ({ loadTaskFromStorage, entities }) => {
+      loadTaskFromStorage();
       effect(() => {
-        localStorage.setItem('tasks-store', JSON.stringify(store.entities()));
+        localStorage.setItem('tasks-store', JSON.stringify(entities()));
       });
     }
   })
