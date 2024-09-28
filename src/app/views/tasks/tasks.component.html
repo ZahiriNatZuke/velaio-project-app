@@ -1,1 +1,56 @@
-<p>tasks works!</p>
+<section class="flex flex-col space-y-5 w-full">
+  <header class="text-2xl md:text-3xl font-semibold md:font-bold">Lista de Tareas</header>
+  <nav class="flex justify-start items-center w-full space-x-5 border-t-2 border-slate-300 pt-4">
+    <span class="text-lg md:text-xl md:font-semibold"> Filtros: </span>
+    <mat-button-toggle-group [(ngModel)]="taskStatus">
+      <mat-button-toggle [value]="null">Todas</mat-button-toggle>
+      <mat-button-toggle [value]="'completed'">Completadas</mat-button-toggle>
+      <mat-button-toggle [value]="'pending'">Pendientes</mat-button-toggle>
+    </mat-button-toggle-group>
+    <a mat-flat-button color="primary" [routerLink]="['/form']">Nueva Tarea</a>
+  </nav>
+  <mat-list class="w-full border-y-2 border-slate-300 py-4 divide-dashed">
+    @for (task of tasks(); track task.id; let index = $index, last = $last) {
+      <mat-list-item>
+        <div class="flex flex-col">
+          <header class="flex justify-start space-x-4">
+            <h6 class="text-lg">
+              <span>{{ index + 1 }}.</span> <span class="font-semibold ps-3">{{ task.name }}</span> -
+              <small>{{ task.dueDate | date:'yyyy-MM-dd' }}</small>
+            </h6>
+            @if (task.status === 'pending') {
+              <button mat-icon-button color="primary" type="button" matTooltip="Marcar como completada"
+                      (click)="markAsCompleted(task)">
+                <mat-icon>task</mat-icon>
+              </button>
+            }
+            <button mat-icon-button color="warn" type="button" matTooltip="Eliminar tarea"
+                    (click)="removeTask(task)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </header>
+          <span class="font-semibold text-base">
+            Personas Asociadas:
+          </span>
+        </div>
+        <mat-list>
+          @for (people of task.people; track people.name) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>remove</mat-icon>
+              <span matListItemTitle>{{ people.name }} ({{ people.age }})</span>
+              @let skills = people.skills.join(', ') ;
+              <span matListItemLine>Habilidades: {{ skills | titlecase }}</span>
+            </mat-list-item>
+          }
+        </mat-list>
+      </mat-list-item>
+      @if (!last) {
+        <mat-divider></mat-divider>
+      }
+    } @empty {
+      <mat-list-item>
+        <span class="font-semibold">No hay tareas</span>
+      </mat-list-item>
+    }
+  </mat-list>
+</section>
