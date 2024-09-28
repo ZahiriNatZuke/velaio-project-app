@@ -1,24 +1,18 @@
 <section class="flex flex-col space-y-5 w-full">
   @let header = action() === 'create' ? 'Crear Nueva Tarea' : 'Actualizar Tarea' ;
-  <header class="text-2xl md:text-3xl font-semibold md:font-bold">
-    {{ header }}
-  </header>
+  <header class="text-2xl md:text-3xl font-semibold md:font-bold">{{ header }}</header>
   <form [formGroup]="taskFormGroup" (ngSubmit)="saveTask()"
         class="flex flex-col w-full space-y-2.5 border-t-2 border-slate-300 pt-4">
     <!--Task Name-->
     <div class="flex flex-col md:flex-row justify-start md:items-center">
-      <label for="task-name" class="font-semibold mb-3 md:mb-5 md:mr-5">
-        Nombre de la Tarea
-      </label>
+      <label for="task-name" class="font-semibold mb-3 md:mb-5 md:mr-5">Nombre de la Tarea</label>
       <mat-form-field>
         <input id="task-name" matInput formControlName="name" type="text" required/>
       </mat-form-field>
     </div>
     <!--Task Due Date-->
     <div class="flex flex-col md:flex-row justify-start md:items-center">
-      <label for="task-due-date" class="font-semibold mb-3 md:mb-5 md:mr-5">
-        Fecha Límite
-      </label>
+      <label for="task-due-date" class="font-semibold mb-3 md:mb-5 md:mr-5">Fecha Límite</label>
       <mat-form-field>
         <mat-datepicker #picker></mat-datepicker>
         <input id="task-due-date" formControlName="dueDate" matInput [matDatepicker]="picker" [min]="minDueDate()">
@@ -27,9 +21,7 @@
     </div>
     <!--People Section-->
     <section class="flex flex-col space-y-3 w-full">
-      <header class="text-xl md:text-2xl font-semibold md:font-bold">
-        Personas Asociadas:
-      </header>
+      <header class="text-xl md:text-2xl font-semibold md:font-bold">Personas Asociadas:</header>
       <ul formArrayName="people" class="flex flex-col w-full space-y-3.5 ps-5">
         @for (personFormGroup of peopleFormArray.controls; track personFormGroup; let controlIndex = $index, lastPerson = $last, length = $count) {
           <li [formGroupName]="controlIndex"
@@ -45,9 +37,7 @@
             </div>
             <!--Person Age-->
             <div class="flex flex-col md:flex-row justify-start md:items-center">
-              <label for="person-age-{{ controlIndex}}" class="font-semibold mb-3 md:mb-5 md:mr-5">
-                Edad
-              </label>
+              <label for="person-age-{{ controlIndex}}" class="font-semibold mb-3 md:mb-5 md:mr-5">Edad</label>
               <mat-form-field>
                 <input id="person-age-{{ controlIndex }}" matInput formControlName="age" type="number" required
                        [min]="18"/>
@@ -55,9 +45,7 @@
             </div>
             <!--Skills Section-->
             <section class="flex flex-col space-y-3 w-full">
-              <header class="text-lg md:text-xl font-semibold">
-                Habilidades:
-              </header>
+              <header class="text-lg md:text-xl font-semibold">Habilidades:</header>
               <ul formArrayName="skills" class="flex flex-col w-full space-y-3.5 border-l-2 border-slate-300 ps-3.5">
                 @let skillsArray = getSkillsFormArray(personFormGroup) ;
                 @for (skillControl of skillsArray.controls; track skillControl; let skillIndex = $index, last = $last, skillLength = $count) {
@@ -104,12 +92,8 @@
       </ul>
     </section>
     <footer class="flex flex-row space-x-3.5 border-t-2 border-slate-300 pt-5">
-      <button mat-flat-button color="primary" type="submit" [disabled]="taskFormGroup.invalid">
-        Guardar Tarea
-      </button>
-      <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">
-        Cancelar
-      </button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="taskFormGroup.invalid">Guardar Tarea</button>
+      <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">Cancelar</button>
     </footer>
   </form>
 </section>
