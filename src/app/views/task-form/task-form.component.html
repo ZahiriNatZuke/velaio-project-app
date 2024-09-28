@@ -1,4 +1,4 @@
-<main class="p-5 flex flex-col space-y-5 w-full max-w-3xl mx-auto">
+<section class="flex flex-col space-y-5 w-full">
   @let header = action() === 'create' ? 'Crear Nueva Tarea' : 'Actualizar Tarea' ;
   <header class="text-2xl md:text-3xl font-semibold md:font-bold">
     {{ header }}
@@ -105,11 +105,9 @@
       <button mat-flat-button color="primary" type="submit">
         Guardar Tarea
       </button>
-      @if (action() === 'update') {
-        <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">
-          Cancelar
-        </button>
-      }
+      <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">
+        Cancelar
+      </button>
     </footer>
   </form>
-</main>
+</section>
