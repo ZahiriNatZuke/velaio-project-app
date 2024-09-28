@@ -1,0 +1,115 @@
+<main class="p-5 flex flex-col space-y-5 w-full max-w-3xl mx-auto">
+  @let header = action() === 'create' ? 'Crear Nueva Tarea' : 'Actualizar Tarea' ;
+  <header class="text-2xl md:text-3xl font-semibold md:font-bold">
+    {{ header }}
+  </header>
+  <form [formGroup]="taskFormGroup" (ngSubmit)="saveTask()"
+        class="flex flex-col w-full space-y-2.5 border-t-2 border-slate-300 pt-4">
+    <!--Task Name-->
+    <div class="flex flex-col md:flex-row justify-start md:items-center">
+      <label for="task-name" class="font-semibold mb-3 md:mb-5 md:mr-5">
+        Nombre de la Tarea
+      </label>
+      <mat-form-field>
+        <input id="task-name" matInput formControlName="name" type="text" required/>
+      </mat-form-field>
+    </div>
+    <!--Task Due Date-->
+    <div class="flex flex-col md:flex-row justify-start md:items-center">
+      <label for="task-due-date" class="font-semibold mb-3 md:mb-5 md:mr-5">
+        Fecha Límite
+      </label>
+      <mat-form-field>
+        <mat-datepicker #picker></mat-datepicker>
+        <input id="task-due-date" matInput [matDatepicker]="picker" [min]="minDueDate()">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      </mat-form-field>
+    </div>
+    <!--People Section-->
+    <section class="flex flex-col space-y-3 w-full">
+      <header class="text-xl md:text-2xl font-semibold md:font-bold">
+        Personas Asociadas:
+      </header>
+      <ul formArrayName="people" class="flex flex-col w-full space-y-3.5 ps-5">
+        @for (personFormGroup of peopleFormArray.controls; track personFormGroup; let controlIndex = $index, lastPerson = $last, length = $count) {
+          <li [formGroupName]="controlIndex"
+              class="flex flex-col w-full space-y-2.5 border-l-2 border-slate-300 ps-3.5">
+            <!--Person Name-->
+            <div class="flex flex-col md:flex-row justify-start md:items-center">
+              <label for="person-name-{{ controlIndex }}" class="font-semibold mb-3 md:mb-5 md:mr-5">
+                Nombre Completo
+              </label>
+              <mat-form-field>
+                <input id="person-name-{{ controlIndex }}" matInput formControlName="name" type="text" required/>
+              </mat-form-field>
+            </div>
+            <!--Person Age-->
+            <div class="flex flex-col md:flex-row justify-start md:items-center">
+              <label for="person-age-{{ controlIndex}}" class="font-semibold mb-3 md:mb-5 md:mr-5">
+                Edad
+              </label>
+              <mat-form-field>
+                <input id="person-age-{{ controlIndex }}" matInput formControlName="age" type="number" required
+                       [min]="18"/>
+              </mat-form-field>
+            </div>
+            <!--Skills Section-->
+            <section class="flex flex-col space-y-3 w-full">
+              <header class="text-lg md:text-xl font-semibold">
+                Habilidades:
+              </header>
+              <ul formArrayName="skills" class="flex flex-col w-full space-y-3.5 border-l-2 border-slate-300 ps-3.5">
+                @let skillsArray = getSkillsFormArray(personFormGroup) ;
+                @for (skillControl of skillsArray.controls; track skillControl; let skillIndex = $index, last = $last, skillLength = $count) {
+                  <li class="flex flex-col w-full space-y-2.5">
+                    <!--Skill-->
+                    <div class="flex flex-row space-x-3.5 justify-start items-start">
+                      <mat-form-field class="flex-1 md:max-w-80">
+                        <input id="skill-{{ skillIndex }}" matInput [formControlName]="skillIndex" type="text" required
+                               placeholder="Skill #{{ skillIndex + 1 }}"/>
+                      </mat-form-field>
+                      @if (skillLength > 1) {
+                        <button mat-mini-fab type="button" color="accent"
+                                (click)="removeSkill(skillsArray, skillIndex)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      }
+                      @if (last) {
+                        <button mat-mini-fab type="button" color="primary" (click)="addSkill(skillsArray)">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      }
+                    </div>
+                  </li>
+                }
+              </ul>
+            </section>
+            <!--Actions over People-->
+            <div class="flex flex-row space-x-3.5">
+              @if (lastPerson) {
+                <button mat-flat-button color="primary" type="button" (click)="addPerson()">
+                  Añadir Persona
+                </button>
+              }
+              @if (length > 1) {
+                <button mat-flat-button color="warn" type="button" (click)="removePerson(controlIndex)">
+                  Eliminar Persona
+                </button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    </section>
+    <footer class="flex flex-row space-x-3.5 border-t-2 border-slate-300 pt-5">
+      <button mat-flat-button color="primary" type="submit">
+        Guardar Tarea
+      </button>
+      @if (action() === 'update') {
+        <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">
+          Cancelar
+        </button>
+      }
+    </footer>
+  </form>
+</main>

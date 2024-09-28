@@ -7,6 +7,14 @@ export const TasksStore = signalStore(
   { providedIn: 'root' },
   withEntities<Task>(),
   withMethods((store) => ( {
+    getTask(id: string): Task | undefined {
+      return store.ids().includes(id)
+        ? store.entityMap()[ id ]
+        : undefined;
+    },
+    checkTask(id: string): boolean {
+      return store.ids().includes(id);
+    },
     addTask(newTask: TaskWithoutID): void {
       patchState(store, addEntity({ id: generateID(), ...newTask }));
     },

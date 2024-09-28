@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$light-theme: mat.define-theme((color: (theme-type: light, primary: mat.$azure-palette), density: (scale: -1)));
 
 @tailwind base;
 @tailwind components;
@@ -7,4 +12,34 @@
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html {
+  @include mat.all-component-colors($light-theme);
+}
+
+:root {
+  --sb-size: 10px;
+  --sb-track-color: #c9d6fc;
+  --sb-thumb-color: #004ba3;
+}
+
+*::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 4px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
