@@ -23,6 +23,9 @@
               <mat-icon>task</mat-icon>
             </button>
           }
+          <a mat-icon-button color="accent" type="button" matTooltip="Editar tarea" [routerLink]="['/form', task.id]">
+            <mat-icon>edit</mat-icon>
+          </a>
           <button mat-icon-button color="warn" type="button" matTooltip="Eliminar tarea"
                   (click)="removeTask(task)">
             <mat-icon>delete</mat-icon>
