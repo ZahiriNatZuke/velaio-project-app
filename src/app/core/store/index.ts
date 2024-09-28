@@ -4,6 +4,7 @@ import { addEntities, addEntity, removeEntity, updateEntity, withEntities } from
 import { generateID } from '@app/core/utils';
 import { effect } from '@angular/core';
 
+// @ts-ignore
 export const TasksStore = signalStore(
   { providedIn: 'root', protectedState: true },
   withEntities<Task>(),
@@ -28,8 +29,8 @@ export const TasksStore = signalStore(
     loadTaskFromStorage(): void {
       try {
         if ( localStorage.getItem('tasks-store') ) {
-          const tasks: TaskWithoutID[] = JSON.parse(localStorage.getItem('tasks-store')!);
-          patchState(store, addEntities(tasks.map(task => ( { ...task, id: generateID() } ))));
+          const tasks: Task[] = JSON.parse(localStorage.getItem('tasks-store')!);
+          patchState(store, addEntities(tasks));
         }
       } catch ( _ ) {
         console.log('La información recuperada del localStorage no tiene un formato correcto');

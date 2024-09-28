@@ -21,7 +21,7 @@
       </label>
       <mat-form-field>
         <mat-datepicker #picker></mat-datepicker>
-        <input id="task-due-date" matInput [matDatepicker]="picker" [min]="minDueDate()">
+        <input id="task-due-date" formControlName="dueDate" matInput [matDatepicker]="picker" [min]="minDueDate()">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       </mat-form-field>
     </div>
@@ -75,7 +75,8 @@
                         </button>
                       }
                       @if (last) {
-                        <button mat-mini-fab type="button" color="primary" (click)="addSkill(skillsArray)">
+                        <button mat-mini-fab type="button" color="primary" (click)="addSkill(skillsArray)"
+                                [disabled]="skillsArray.invalid">
                           <mat-icon>add</mat-icon>
                         </button>
                       }
@@ -87,7 +88,8 @@
             <!--Actions over People-->
             <div class="flex flex-row space-x-3.5">
               @if (lastPerson) {
-                <button mat-flat-button color="primary" type="button" (click)="addPerson()">
+                <button mat-flat-button color="primary" type="button" (click)="addPerson()"
+                        [disabled]="personFormGroup.invalid">
                   Añadir Persona
                 </button>
               }
@@ -102,7 +104,7 @@
       </ul>
     </section>
     <footer class="flex flex-row space-x-3.5 border-t-2 border-slate-300 pt-5">
-      <button mat-flat-button color="primary" type="submit">
+      <button mat-flat-button color="primary" type="submit" [disabled]="taskFormGroup.invalid">
         Guardar Tarea
       </button>
       <button mat-flat-button color="warn" type="reset" (click)="goToTaskList()">

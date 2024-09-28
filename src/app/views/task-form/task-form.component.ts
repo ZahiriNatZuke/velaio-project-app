@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-form',
@@ -20,7 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    JsonPipe
   ],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss',
@@ -38,23 +40,19 @@ export class TaskFormComponent implements OnInit {
 
   taskFormGroup = this.#fb.group({
     name: this.#fb.nonNullable.control<string>('', Validators.required),
-    dueDate: this.#fb.nonNullable.control<Date>(this.minDueDate(), [ Validators.required ]),
+    dueDate: this.#fb.nonNullable.control<any>('', [ Validators.required ]),
     status: this.#fb.nonNullable.control<TaskStatus>('pending', Validators.required),
     people: this.#fb.array<FormGroup>([ this.createPersonFormGroup() ], { validators: [ checkPeople() ] }),
   });
 
   ngOnInit(): void {
-    console.log('[action] => ', this.action());
-    console.log('[taskId] => ', this.taskId());
-
-    this.taskFormGroup.statusChanges.subscribe(console.log);
-
     if ( this.action() === 'update' && this.taskId() ) {
       if ( this.#tasksStore.checkTask(this.taskId()!) ) {
         const { name, people, status, dueDate } = this.#tasksStore.getTask(this.taskId()!)!;
         this.taskFormGroup.reset({
           name, dueDate, status
         });
+        this.taskFormGroup.controls.people.clear();
         people.forEach(p => this.taskFormGroup.controls.people.push(this.createPersonFormGroup(p)));
         this.taskFormGroup.updateValueAndValidity();
       } else {
@@ -80,8 +78,8 @@ export class TaskFormComponent implements OnInit {
       });
 
     return this.#fb.nonNullable.group({
-      name: this.#fb.nonNullable.control('', [ Validators.required, Validators.minLength(5) ]),
-      age: this.#fb.nonNullable.control(18, [ Validators.required, Validators.min(18) ]),
+      name: this.#fb.nonNullable.control(person.name, [ Validators.required, Validators.minLength(5) ]),
+      age: this.#fb.nonNullable.control(person.age, [ Validators.required, Validators.min(18) ]),
       skills: this.#fb.nonNullable.array<FormControl<string>>(
         person.skills.map(s => this.#fb.nonNullable.control<string>(s, [ Validators.required ]))
         , {
@@ -111,9 +109,10 @@ export class TaskFormComponent implements OnInit {
   }
 
   saveTask() {
-    console.log(this.taskFormGroup.value);
     if ( this.taskFormGroup.valid ) {
-      this.#tasksStore.addTask(this.taskFormGroup.value as TaskWithoutID);
+      this.action() === 'create'
+        ? this.#tasksStore.addTask(this.taskFormGroup.value as TaskWithoutID)
+        : this.#tasksStore.updateTask(this.taskId()!, this.taskFormGroup.value);
       this.goToTaskList();
     }
   }

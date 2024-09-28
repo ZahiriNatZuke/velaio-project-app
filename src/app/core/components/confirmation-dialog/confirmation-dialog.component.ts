@@ -11,7 +11,7 @@ import { ConfirmationAction, ConfirmationData } from '@app/core/types';
 
 @Component({
   template: `
-    <h2 mat-dialog-title>¿Está usted seguro?</h2>
+    <h2 mat-dialog-title>Confirmación</h2>
     <mat-dialog-content>
       <p class="text-lg font-medium">
         ¿Está seguro de que desea {{ action }} la tarea: “<b>{{ name }}</b>” ?
