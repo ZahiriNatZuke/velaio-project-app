@@ -1,12 +1,14 @@
 <section class="flex flex-col space-y-5 w-full">
   <header class="text-2xl md:text-3xl font-semibold md:font-bold">Lista de Tareas</header>
-  <nav class="flex justify-start items-center w-full space-x-5 border-t-2 border-slate-300 pt-4">
-    <span class="text-lg md:text-xl md:font-semibold"> Filtros: </span>
-    <mat-button-toggle-group [(ngModel)]="taskStatus">
-      <mat-button-toggle [value]="null">Todas</mat-button-toggle>
-      <mat-button-toggle [value]="'completed'">Completadas</mat-button-toggle>
-      <mat-button-toggle [value]="'pending'">Pendientes</mat-button-toggle>
-    </mat-button-toggle-group>
+  <nav class="flex flex-col md:flex-row justify-start w-full space-y-5 md:space-y-0 md:space-x-5 border-t-2 border-slate-300 pt-4">
+    <div class="flex justify-start items-center">
+      <span class="text-lg md:text-xl md:font-semibold mr-3"> Filtros: </span>
+      <mat-button-toggle-group [(ngModel)]="taskStatus">
+        <mat-button-toggle [value]="null">Todas</mat-button-toggle>
+        <mat-button-toggle [value]="'completed'">Completadas</mat-button-toggle>
+        <mat-button-toggle [value]="'pending'">Pendientes</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
     <a mat-flat-button color="primary" [routerLink]="['/form']">Nueva Tarea</a>
   </nav>
   <ul class="w-full border-y-2 border-slate-300 py-4 divide-dashed space-y-5">
